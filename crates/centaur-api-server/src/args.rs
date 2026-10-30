@@ -1349,8 +1349,9 @@ impl SandboxArgs {
         })
     }
 
-    /// Parse the agent container's security context without silently dropping
-    /// malformed settings. Empty or unset preserves the existing behavior.
+    /// Parse the agent container's security context. Invalid JSON or wrongly
+    /// typed fields fail startup; unknown keys are ignored by the typed parse.
+    /// Empty or unset preserves the existing behavior.
     fn container_security_context(&self) -> Result<Option<SecurityContext>, ServerError> {
         let Some(raw) = self
             .container_security_context_json
